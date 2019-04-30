@@ -67,7 +67,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
 			entity.setEndDate(task.getEndDate());
 			entity.setPriority(task.getPriority());
 			entity.setParentTask(task.getParentTask());
-
+			entity.setTaskComplete(task.getTaskComplete());
+			
 			return repository.save(entity);
 		} catch (Exception e) {
 			throw new TaskManagerServiceException(

@@ -7,6 +7,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.lang.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class TaskDTO {
@@ -31,6 +33,9 @@ public class TaskDTO {
 	private int priority;
 
 	private ParentTaskDTO prntTask;
+
+	@Nullable
+	private Boolean taskComplete;
 
 	public TaskDTO(String task, LocalDate startDate, LocalDate endDate, int priority, ParentTaskDTO parentTask) {
 		super();
@@ -88,4 +93,13 @@ public class TaskDTO {
 	public void setParentTask(ParentTaskDTO parentTask) {
 		this.prntTask = parentTask;
 	}
+
+	public Boolean getTaskComplete() {
+		return taskComplete;
+	}
+
+	public void setTaskComplete(Boolean taskComplete) {
+		this.taskComplete = taskComplete;
+	}
+
 }

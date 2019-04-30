@@ -65,10 +65,12 @@ public class TaskManagerController {
 	 */
 	private Task mapToEntity(TaskDTO task) throws TaskManagerServiceException {
 		Task persistentTask = new Task();
+		persistentTask.setTaskId(task.getTaskId());
 		persistentTask.setTask(task.getTask());
 		persistentTask.setStartDate(task.getStartDate());
 		persistentTask.setEndDate(task.getEndDate());
 		persistentTask.setPriority(task.getPriority());
+		persistentTask.setTaskComplete(task.getTaskComplete());
 
 		if (task.getParentTask() != null) {
 			ParentTask persistentParentTask = taskMngrService.getParentTaskById(task.getParentTask().getParentId());

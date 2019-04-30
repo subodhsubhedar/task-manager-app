@@ -57,7 +57,7 @@ public class TaskManagerCustomExceptionHandler extends ResponseEntityExceptionHa
 		/*
 		 * Optional attribute for sending detailed message.
 		 */
-		errRespObj.setDetailedException(ex);
+		errRespObj.setDetailedException(ex.getMessage());
 		return errRespObj;
 	}
 

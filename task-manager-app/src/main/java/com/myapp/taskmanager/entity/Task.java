@@ -60,6 +60,10 @@ public class Task implements Serializable {
 	@JoinColumn
 	private ParentTask prntTask;
 
+	@Nullable
+	@Column(name = "Is_Complete")
+	private Boolean taskComplete;
+
 	public Task(String task, LocalDate startDate, LocalDate endDate, int priority, ParentTask parentTask) {
 		super();
 		this.taskDesc = task;
@@ -70,9 +74,9 @@ public class Task implements Serializable {
 	}
 
 	public Task() {
-	
+
 	}
-	
+
 	public long getTaskId() {
 		return taskId;
 	}
@@ -120,4 +124,13 @@ public class Task implements Serializable {
 	public void setParentTask(ParentTask parentTask) {
 		this.prntTask = parentTask;
 	}
+
+	public Boolean getTaskComplete() {
+		return taskComplete;
+	}
+
+	public void setTaskComplete(Boolean taskComplete) {
+		this.taskComplete = taskComplete;
+	}
+
 }

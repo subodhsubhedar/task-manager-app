@@ -13,17 +13,17 @@ public class TaskManagerErrorResponse {
 
 	private List<String> errors;
 
-	private Exception detailedException;
+	private String detailedException;
 
 	public TaskManagerErrorResponse() {
 		// Auto-generated constructor stub
 	}
 
-	public Exception getDetailedException() {
+	public String getDetailedException() {
 		return detailedException;
 	}
 
-	public void setDetailedException(Exception detailedException) {
+	public void setDetailedException(String detailedException) {
 		this.detailedException = detailedException;
 	}
 
