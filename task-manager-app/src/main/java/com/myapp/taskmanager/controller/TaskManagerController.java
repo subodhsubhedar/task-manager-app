@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +20,6 @@ import com.myapp.taskmanager.entity.Task;
 import com.myapp.taskmanager.exception.TaskManagerServiceException;
 import com.myapp.taskmanager.service.TaskManagerService;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class TaskManagerController {
 
@@ -29,8 +27,13 @@ public class TaskManagerController {
 	private TaskManagerService taskMngrService;
 
 	@GetMapping(value = "/tasks")
-	public Set<Task> listAllBooks() throws TaskManagerServiceException {
+	public Set<Task> listAllTasks() throws TaskManagerServiceException {
 		return taskMngrService.findAllTasks();
+	}
+	
+	@GetMapping(value = "/parent-tasks")
+	public Set<ParentTask> listAllParentTasks() throws TaskManagerServiceException {
+		return taskMngrService.findAllParenTasks();
 	}
 
 	@GetMapping(value = "/task/{taskId}")

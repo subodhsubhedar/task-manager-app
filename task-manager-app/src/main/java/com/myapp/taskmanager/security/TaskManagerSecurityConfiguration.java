@@ -1,5 +1,7 @@
 package com.myapp.taskmanager.security;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -21,7 +25,9 @@ public class TaskManagerSecurityConfiguration extends WebSecurityConfigurerAdapt
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
-
+	@Autowired
+	private CorsConfigurationSource taskManagerCorsConfigSrc;
+	
 	@Bean
 	public BasicAuthenticationEntryPoint getTaskMngrBasicAuthPoint() {
 		return new TaskManagerBasicAuthEntryPoint();
@@ -44,6 +50,7 @@ public class TaskManagerSecurityConfiguration extends WebSecurityConfigurerAdapt
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http
+			.cors().configurationSource(taskManagerCorsConfigSrc).and()
 			.httpBasic().authenticationEntryPoint(getTaskMngrBasicAuthPoint()).realmName("TASK_MNGR_SECURITY").and()
 				.authorizeRequests().antMatchers(HttpMethod.GET, "/tasks").hasAnyRole(TASK_MNGR_ROLE,TASK_ADMIN_ROLE).and()
 				.authorizeRequests().antMatchers(HttpMethod.GET, "/task/**").hasAnyRole(TASK_MNGR_ROLE,TASK_ADMIN_ROLE).and()

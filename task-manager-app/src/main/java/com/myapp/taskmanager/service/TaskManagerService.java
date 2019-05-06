@@ -14,6 +14,8 @@ import com.myapp.taskmanager.exception.TaskManagerServiceException;
 public interface TaskManagerService {
 
 	Set<Task> findAllTasks() throws TaskManagerServiceException;
+	
+	Set<ParentTask> findAllParenTasks() throws TaskManagerServiceException;
 
 	Task createTask(Task task) throws TaskManagerServiceException;
 

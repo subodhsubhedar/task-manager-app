@@ -68,7 +68,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
 			entity.setPriority(task.getPriority());
 			entity.setParentTask(task.getParentTask());
 			entity.setTaskComplete(task.getTaskComplete());
-			
+
 			return repository.save(entity);
 		} catch (Exception e) {
 			throw new TaskManagerServiceException(
@@ -157,6 +157,19 @@ public class TaskManagerServiceImpl implements TaskManagerService {
 		} catch (Exception e) {
 			throw new TaskManagerServiceException(
 					("Exception occured while retrieving Parent Task with id :" + taskId + " -- " + e.getMessage()), e);
+		}
+	}
+
+	@Override
+	@Transactional
+	public Set<ParentTask> findAllParenTasks() throws TaskManagerServiceException {
+		try {
+
+			return new LinkedHashSet<>(parentTaskRepository.findAll());
+
+		} catch (Exception e) {
+			throw new TaskManagerServiceException(
+					"Exception Occured while retrieving all Tasks." + " -- " + e.getMessage(), e);
 		}
 	}
 
