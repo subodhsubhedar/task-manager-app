@@ -40,13 +40,11 @@ public class Task implements Serializable {
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@NotNull(message = "{task.startDate.invalid}")
-	@FutureOrPresent(message = "{task.startDate.past}")
 	@Column(name = "Start_Date")
 	private LocalDate startDate;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@NotNull(message = "{task.endDate.invalid}")
-	@FutureOrPresent(message = "{task.endDate.past}")
 	@Column(name = "End_Date")
 	private LocalDate endDate;
 

@@ -13,29 +13,39 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class TaskDTO {
 
+	public interface AddTaskValidateGroup {
+	}
+
+	public interface UpdateTaskValidateGroup {
+	}
+
 	private long taskId;
 
-	@NotEmpty(message = "{task.task.invalid}")
+	@NotEmpty(message = "{task.task.invalid}", groups = { UpdateTaskValidateGroup.class })
 	private String task;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	@NotNull(message = "{task.startDate.invalid}")
+	@NotNull(message = "{task.startDate.invalid}", groups = { UpdateTaskValidateGroup.class })
 	@FutureOrPresent(message = "{task.startDate.past}")
 	private LocalDate startDate;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	@NotNull(message = "{task.endDate.invalid}")
+	@NotNull(message = "{task.endDate.invalid}", groups = { UpdateTaskValidateGroup.class })
 	@FutureOrPresent(message = "{task.endDate.past}")
 	private LocalDate endDate;
 
-	@NotNull(message = "{task.priority.invalid}")
-	@Min(message = "{task.priority.negativeOrZero}", value = 1)
+	@NotNull(message = "{task.priority.invalid}", groups = { UpdateTaskValidateGroup.class })
+	@Min(message = "{task.priority.negativeOrZero}", value = 1, groups = { UpdateTaskValidateGroup.class })
 	private int priority;
 
 	private ParentTaskDTO prntTask;
 
 	@Nullable
 	private Boolean taskComplete;
+
+	public TaskDTO() {
+
+	}
 
 	public TaskDTO(String task, LocalDate startDate, LocalDate endDate, int priority, ParentTaskDTO parentTask) {
 		super();

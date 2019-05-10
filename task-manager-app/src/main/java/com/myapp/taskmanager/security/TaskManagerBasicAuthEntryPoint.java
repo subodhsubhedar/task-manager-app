@@ -17,7 +17,7 @@ public class TaskManagerBasicAuthEntryPoint extends BasicAuthenticationEntryPoin
 
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		response.setHeader("auth-custom", authException.getMessage());
-
+		
 		super.commence(request, response, authException);
 	}
 
