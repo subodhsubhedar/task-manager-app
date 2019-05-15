@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -36,7 +35,7 @@ public class Task implements Serializable {
 
 	@NotEmpty(message = "{task.task.invalid}")
 	@Column(name = "Task")
-	private String taskDesc;
+	private String task;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@NotNull(message = "{task.startDate.invalid}")
@@ -64,7 +63,7 @@ public class Task implements Serializable {
 
 	public Task(String task, LocalDate startDate, LocalDate endDate, int priority, ParentTask parentTask) {
 		super();
-		this.taskDesc = task;
+		this.task = task;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.priority = priority;
@@ -84,11 +83,11 @@ public class Task implements Serializable {
 	}
 
 	public String getTask() {
-		return taskDesc;
+		return task;
 	}
 
 	public void setTask(String task) {
-		this.taskDesc = task;
+		this.task = task;
 	}
 
 	public LocalDate getStartDate() {
@@ -129,6 +128,12 @@ public class Task implements Serializable {
 
 	public void setTaskComplete(Boolean taskComplete) {
 		this.taskComplete = taskComplete;
+	}
+
+	@Override
+	public String toString() {
+		return "Task [taskId=" + taskId + ", task=" + task + ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", priority=" + priority + ", taskComplete=" + taskComplete + "]";
 	}
 
 }

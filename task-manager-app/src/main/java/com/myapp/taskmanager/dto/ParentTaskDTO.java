@@ -43,4 +43,10 @@ public class ParentTaskDTO {
 	public void addSubTasks(TaskDTO subTask) {
 		this.subTasks.add(subTask);
 	}
+
+	@Override
+	public String toString() {
+		return "ParentTaskDTO [parentId=" + parentId + ", parentTaskDesc=" + parentTaskDesc + "]";
+	}
+
 }

@@ -1,5 +1,7 @@
 package com.myapp.taskmanager.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +17,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class TaskManagerSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+	private static final Logger logger = LoggerFactory.getLogger(TaskManagerSecurityConfiguration.class);
 
 	private static final String TASK_MNGR_ROLE= "TASK_MNGR";
 	private static final String TASK_ADMIN_ROLE= "TASK_ADMIN";
@@ -37,6 +41,8 @@ public class TaskManagerSecurityConfiguration extends WebSecurityConfigurerAdapt
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		logger.debug("Configuring AuthenticationManagerBuilder with inMemoryAuthentication params...");
+		
 		auth.inMemoryAuthentication()
 				.withUser("subodh").password(passwordEncoder.encode("subodh123")).roles(TASK_MNGR_ROLE).and()
 				.withUser("admin").password(passwordEncoder.encode("admin123"))
@@ -45,7 +51,8 @@ public class TaskManagerSecurityConfiguration extends WebSecurityConfigurerAdapt
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-
+		logger.debug("Configuring Authorization params...");
+		
 		http
 			.cors().configurationSource(taskManagerCorsConfigSrc).and()
 			.httpBasic().authenticationEntryPoint(getTaskMngrBasicAuthPoint()).realmName("TASK_MNGR_SECURITY").and()

@@ -6,11 +6,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.myapp.taskmanager.entity.Task;
-
+/**
+ * 
+ * @author Admin
+ *
+ */
 @Repository
 public interface TaskManagerRepository extends JpaRepository<Task, Long>	{
 
 	
-	Optional<Task> findByTaskDesc(String taskDesc);
+	Optional<Task> findByTask(String taskDesc);
 
 }

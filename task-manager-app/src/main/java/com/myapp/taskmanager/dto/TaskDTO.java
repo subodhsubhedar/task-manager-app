@@ -112,4 +112,10 @@ public class TaskDTO {
 		this.taskComplete = taskComplete;
 	}
 
+	@Override
+	public String toString() {
+		return "TaskDTO [taskId=" + taskId + ", task=" + task + ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", priority=" + priority + ", taskComplete=" + taskComplete + "]";
+	}
+
 }

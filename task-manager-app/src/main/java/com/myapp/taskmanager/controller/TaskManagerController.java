@@ -1,7 +1,6 @@
 package com.myapp.taskmanager.controller;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -10,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,97 +21,121 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.myapp.taskmanager.dto.ParentTaskDTO;
 import com.myapp.taskmanager.dto.TaskDTO;
 import com.myapp.taskmanager.dto.TaskDTO.UpdateTaskValidateGroup;
 import com.myapp.taskmanager.entity.ParentTask;
 import com.myapp.taskmanager.entity.Task;
 import com.myapp.taskmanager.exception.TaskManagerServiceException;
+import com.myapp.taskmanager.mapper.TaskManagerEntityToDtoMapper;
 import com.myapp.taskmanager.service.TaskManagerService;
 
+/**
+ * 
+ * @author Admin
+ *
+ */
 @RestController
 public class TaskManagerController {
+
+	private static final Logger logger = LoggerFactory.getLogger(TaskManagerController.class);
 
 	@Autowired
 	private TaskManagerService taskMngrService;
 
+	@Autowired
+	private TaskManagerEntityToDtoMapper mapper;
+
 	@GetMapping(value = "/login")
 	public boolean login(HttpServletRequest request, HttpServletResponse response)
-			throws TaskManagerServiceException, IOException, ServletException {
+			throws IOException, ServletException {
 
-		Enumeration headerNames = request.getHeaderNames();
-		while (headerNames.hasMoreElements()) {
-			String headerName = (String) headerNames.nextElement();
-			System.out.println("##HEADER: " + headerName + " ##VALUE: " + request.getHeader(headerName));
-		}
-
-		System.out.println("Auth requets header : " + request.getHeaders("Authorization"));
-
-		System.out.println("request received:" + request.getHeaderNames().toString());
-
+		logger.debug("Login request receieved, auth header :{}", request.getHeaders("Authorization"));
 		boolean result = request.authenticate(response);
-
-		System.out.println("auth result :" + result);
+		logger.debug("Authentication result :{} ", result);
 
 		return result;
-
 	}
 
 	@GetMapping(value = "/tasks")
-	public Set<Task> listAllTasks() throws TaskManagerServiceException {
-		return taskMngrService.findAllTasks();
+	public Set<TaskDTO> listAllTasks() throws TaskManagerServiceException {
+		logger.debug("GET listAllTasks() request received");
+		return getMappedDtoSet(taskMngrService.findAllTasks());
 	}
 
 	@GetMapping(value = "/parent-tasks")
-	public Set<ParentTask> listAllParentTasks() throws TaskManagerServiceException {
-		return taskMngrService.findAllParenTasks();
+	public Set<ParentTaskDTO> listAllParentTasks() throws TaskManagerServiceException {
+		logger.debug("GET listAllParentTasks() request received");
+		return getMappedParentDtoSet(taskMngrService.findAllParenTasks());
+
 	}
 
 	@GetMapping(value = "/task/{taskId}")
-	public Task getTask(@PathVariable @Valid @NotNull Long taskId) throws TaskManagerServiceException {
-
-		return taskMngrService.getTaskById(taskId);
+	public TaskDTO getTask(@PathVariable @Valid @NotNull Long taskId) throws TaskManagerServiceException {
+		logger.debug("GET getTask() request received for {}", taskId);
+		return getMappedDto(taskMngrService.getTaskById(taskId));
 	}
 
 	@PostMapping(value = "/task/add")
-	public Task addNewTask(@Valid @RequestBody TaskDTO task) throws TaskManagerServiceException {
+	public TaskDTO addNewTask(@Valid @RequestBody TaskDTO taskDto) throws TaskManagerServiceException {
+		logger.debug("POST addNewTask() request received {}", taskDto);
 
-		Task persistentTask = mapToEntity(task);
-		return taskMngrService.createTask(persistentTask);
+		Task persistentTask = getMappedEntity(taskDto);
+		logger.debug("POST addNewTask() mapped entity {}", persistentTask);
+
+		return getMappedDto(taskMngrService.createTask(persistentTask));
 	}
 
 	@PutMapping(value = "/task/update")
-	public Task updateTask(@Validated({ UpdateTaskValidateGroup.class }) @RequestBody TaskDTO task)
+	public TaskDTO updateTask(@Validated({ UpdateTaskValidateGroup.class }) @RequestBody TaskDTO taskDto)
 			throws TaskManagerServiceException {
-		Task persistentTask = mapToEntity(task);
-		return taskMngrService.updateTask(persistentTask);
+		logger.debug("PUT updateTask() request received {}", taskDto);
+
+		Task persistentTask = getMappedEntity(taskDto);
+		logger.debug("PUT updateTask() mapped entity {}", persistentTask);
+		return getMappedDto(taskMngrService.updateTask(persistentTask));
 	}
 
 	@DeleteMapping(value = "/task/delete/{taskId}")
 	public void deleteTask(@PathVariable @Valid @NotNull Long taskId) throws TaskManagerServiceException {
+		logger.debug("DELETE deleteTask() request received {}", taskId);
 		taskMngrService.deleteTaskById(taskId);
 	}
 
 	/**
 	 * 
-	 * @param task
+	 * @param taskDto
 	 * @return
-	 * @throws TaskManagerServiceException
 	 */
-	private Task mapToEntity(TaskDTO task) throws TaskManagerServiceException {
-		Task persistentTask = new Task();
-		persistentTask.setTaskId(task.getTaskId());
-		persistentTask.setTask(task.getTask());
-		persistentTask.setStartDate(task.getStartDate());
-		persistentTask.setEndDate(task.getEndDate());
-		persistentTask.setPriority(task.getPriority());
-		persistentTask.setTaskComplete(task.getTaskComplete());
+	private Task getMappedEntity(TaskDTO taskDto) {
+		return mapper.getMappedTaskEntity(taskDto);
+	}
 
-		if (task.getParentTask() != null && task.getParentTask().getParentId() !=0) {
-			ParentTask persistentParentTask = taskMngrService.getParentTaskById(task.getParentTask().getParentId());
-			persistentTask.setParentTask(persistentParentTask);
-		}
-		return persistentTask;
+	/**
+	 * 
+	 * @param taskEntitySet
+	 * @return
+	 */
+	private Set<TaskDTO> getMappedDtoSet(Set<Task> taskEntitySet) {
+		return mapper.getMappedTaskDtoSet(taskEntitySet);
+	}
 
+	/**
+	 * 
+	 * @param parentTaskEntitySet
+	 * @return
+	 */
+	private Set<ParentTaskDTO> getMappedParentDtoSet(Set<ParentTask> parentTaskEntitySet) {
+		return mapper.getMappedParentTaskDtoSet(parentTaskEntitySet);
+	}
+
+	/**
+	 * 
+	 * @param taskEntity
+	 * @return
+	 */
+	private TaskDTO getMappedDto(Task taskEntity) {
+		return mapper.getMappedTaskDto(taskEntity);
 	}
 
 }

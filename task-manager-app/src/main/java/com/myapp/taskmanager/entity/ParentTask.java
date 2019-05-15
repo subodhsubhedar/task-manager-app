@@ -3,6 +3,7 @@ package com.myapp.taskmanager.entity;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,7 +25,7 @@ public class ParentTask implements Serializable {
 	private static final long serialVersionUID = -6839843018667052320L;
 
 	@Id
-	@GeneratedValue
+	// @GeneratedValue
 	@Column(name = "Parent_ID", nullable = false)
 	private long parentId;
 
@@ -37,9 +38,9 @@ public class ParentTask implements Serializable {
 	private Set<Task> subTasks;
 
 	public ParentTask() {
-		//Default constructor
+		// Default constructor
 	}
-	
+
 	public long getParentId() {
 		return parentId;
 	}
@@ -67,4 +68,10 @@ public class ParentTask implements Serializable {
 	public void addSubTasks(Task subTask) {
 		this.subTasks.add(subTask);
 	}
+
+	@Override
+	public String toString() {
+		return "ParentTask [parentId=" + parentId + ", parentTaskDesc=" + parentTaskDesc + "]";
+	}
+
 }

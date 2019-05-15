@@ -5,6 +5,11 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * 
+ * @author Admin
+ *
+ */
 public class TaskManagerErrorResponse {
 
 	private LocalDateTime dateTime;
