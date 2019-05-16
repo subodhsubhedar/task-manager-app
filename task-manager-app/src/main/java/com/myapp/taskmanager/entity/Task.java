@@ -61,13 +61,17 @@ public class Task implements Serializable {
 	@Column(name = "Is_Complete")
 	private Boolean taskComplete;
 
-	public Task(String task, LocalDate startDate, LocalDate endDate, int priority, ParentTask parentTask) {
+	public Task(Long taskId, String task, LocalDate startDate, LocalDate endDate, int priority, ParentTask parentTask,
+			Boolean taskComplete) {
 		super();
 		this.task = task;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.priority = priority;
 		this.prntTask = parentTask;
+		this.taskId = taskId;
+		
+		this.taskComplete = taskComplete;
 	}
 
 	public Task() {

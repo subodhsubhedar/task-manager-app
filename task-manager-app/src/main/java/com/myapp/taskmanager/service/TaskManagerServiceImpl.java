@@ -194,7 +194,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
 			throw new TaskManagerServiceException(
 					("Exception occured while retrieving Parent Task with id :" + taskId + " -- " + e.getMessage()), e);
 		}
-	}
+	} 
 
 	@Override
 	@Transactional

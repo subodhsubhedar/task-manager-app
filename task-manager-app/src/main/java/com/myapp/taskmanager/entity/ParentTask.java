@@ -1,13 +1,12 @@
 package com.myapp.taskmanager.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -41,6 +40,14 @@ public class ParentTask implements Serializable {
 		// Default constructor
 	}
 
+	public ParentTask(long parentId, @NotEmpty(message = "{parentTask.parentTask.invalid}") String parentTaskDesc,
+			Set<Task> subTasks) {
+		super();
+		this.parentId = parentId;
+		this.parentTaskDesc = parentTaskDesc;
+		this.subTasks = subTasks;
+	}
+
 	public long getParentId() {
 		return parentId;
 	}
@@ -66,6 +73,9 @@ public class ParentTask implements Serializable {
 	}
 
 	public void addSubTasks(Task subTask) {
+		if (this.subTasks == null) {
+			this.subTasks = new HashSet<Task>();
+		}
 		this.subTasks.add(subTask);
 	}
 
