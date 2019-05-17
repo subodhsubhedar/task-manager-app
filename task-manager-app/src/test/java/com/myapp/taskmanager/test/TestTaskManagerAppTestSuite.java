@@ -9,13 +9,14 @@ import org.junit.runners.Suite.SuiteClasses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.myapp.taskmanager.controller.TaskManagerControllerTestManager;
 import com.myapp.taskmanager.dao.TaskManagerDaoIntegrationTestManager;
 import com.myapp.taskmanager.service.TaskManagerServiceIntegrationTestManager;
 import com.myapp.taskmanager.service.TaskManagerServiceUnitTestManager;
 
 @RunWith(Suite.class)
-@SuiteClasses({ TaskManagerDaoIntegrationTestManager.class, TaskManagerServiceIntegrationTestManager.class,
-		TaskManagerServiceUnitTestManager.class })
+@SuiteClasses({ TaskManagerControllerTestManager.class, TaskManagerDaoIntegrationTestManager.class,
+		TaskManagerServiceIntegrationTestManager.class, TaskManagerServiceUnitTestManager.class })
 
 public class TestTaskManagerAppTestSuite {
 
