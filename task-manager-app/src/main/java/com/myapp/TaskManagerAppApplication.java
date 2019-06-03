@@ -51,7 +51,7 @@ public class TaskManagerAppApplication {
 			String[] beanNames = ctx.getBeanDefinitionNames();
 			Arrays.sort(beanNames);
 
-			logger.debug(Arrays.asList(beanNames).toString());
+			logger.debug("Beans provided : {}", beanNames);
 
 			logger.debug("################################################");
 		};

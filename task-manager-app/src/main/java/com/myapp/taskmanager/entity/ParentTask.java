@@ -24,7 +24,6 @@ public class ParentTask implements Serializable {
 	private static final long serialVersionUID = -6839843018667052320L;
 
 	@Id
-	// @GeneratedValue
 	@Column(name = "Parent_ID", nullable = false)
 	private long parentId;
 
